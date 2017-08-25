@@ -1,0 +1,93 @@
+<link rel="import" href="./polymer/polymer-2.0.2/polymer-element.html">
+
+<dom-module id="sound-box">
+  <template>
+    <style>
+      #video
+      {
+        height: 0;
+        width: 0;
+        display: none;
+      }
+    </style>
+
+    <div class="controls">
+      <a href="" id="play" on-click="vplay">play</a>
+      <a href="" id="stop" on-click="vstop">stop</a>
+    </div>
+
+    <div id="video"></div>
+
+  </template>
+
+  <script>
+    class soundBox extends Polymer.Element
+    {
+      static get is()
+      {
+        return "sound-box";
+      }
+
+      static get properties()
+      {
+        return {
+
+        };
+      }
+
+      ready()
+      {
+        super.ready();
+
+        this.player=new YT.Player(this.$["video"],{height:0,width:0,videoId:"QY1Vetd7OCs"});
+      }
+
+      vplay(e)
+      {
+        e.preventDefault();
+
+        if (this.player.getPlayerState()==1)
+        {
+          return;
+        }
+
+        this.player.setVolume(100);
+        this.player.seekTo(0);
+        this.player.playVideo();
+      }
+
+      vstop(e)
+      {
+        e.preventDefault();
+        this.vfade(1000);
+      }
+
+      //time to fade out in ms
+      //current max 5sec
+      vfade(time)
+      {
+        if (this.player.getPlayerState()!=1)
+        {
+          return;
+        }
+
+        time=10000/time;
+        var vol=100;
+        var fadeTimer=setInterval(()=>{
+          if (vol<=0)
+          {
+            clearInterval(fadeTimer);
+            this.player.pauseVideo();
+            return;
+          }
+
+          vol-=time;
+          vol=Math.floor(vol);
+          this.player.setVolume(vol);
+        },50);
+      }
+    }
+
+    customElements.define(soundBox.is,soundBox);
+  </script>
+</dom-module>
