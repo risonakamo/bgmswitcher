@@ -1,17 +1,14 @@
 window.onload=main;
 
-var _soundboxes;
+var soundboxHandler;
 
 function main()
 {
-    _soundboxes=document.querySelectorAll("sound-box");
+    soundboxHandler=new _soundboxHandler;
 
     var stopAll=document.querySelector(".stop-button");
 
     stopAll.addEventListener("click",(e)=>{
-        for (var x=0;x<_soundboxes.length;x++)
-        {
-            _soundboxes[x].vstop();
-        }
+        soundboxHandler.stopAll();
     });
 }

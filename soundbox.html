@@ -6,11 +6,28 @@
       :host
       {
         display: inline-block;
+        color: #f1f1f1;
+        font-size: 0;
+        border-bottom: 2px solid rgba(0,0,0,0);
+        transition: border-bottom-color .1s;
+      }
+
+      :host(.selectable)
+      {
+        user-select: none;
+        cursor: pointer;
+      }
+
+      :host(.selectable:hover)
+      {
+        border-bottom: 2px solid #f1f1f1;
+      }
+
+      :host(.selected)
+      {
         height: 160px;
         width: auto;
-        color: white;
-        font-size: 0;
-        border-bottom: 2px solid white;
+        border-bottom: 2px solid #f1f1f1;
         background-color: #272727;
       }
 
@@ -18,6 +35,20 @@
       {
         display: inline-block;
         vertical-align: top;
+      }
+
+      #loaded-content
+      {
+        width: 0;
+        height: 0;
+        display: none;
+      }
+
+      :host(.selectable) #loaded-content,:host(.selected) #loaded-content
+      {
+        width: auto;
+        height: 160px;
+        display: block;
       }
 
       .left
@@ -56,17 +87,55 @@
         width: 0;
         display: none;
       }
+
+      #input-page
+      {
+        width: 408px;
+        height: 160px;
+        background-color: rgba(14, 14, 14, 0.45);
+        border: 1px dashed rgba(255, 255, 255, 0.30);
+      }
+
+      #input-page textarea
+      {
+        display: block;
+        width: 380px;
+        height: 25px;
+        resize: none;
+        margin: auto;
+        margin-top: 15%;
+        background-color: rgba(0,0,0,0);
+        color: #f1f1f1;
+        font-size: 18px;
+        border: none;
+        font-family: "ftr";
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      #input-page textarea:focus
+      {
+        outline: none;
+        background-color: rgb(16, 16, 16);
+      }
     </style>
 
-    <div class="left">
-      <img src="https://img.youtube.com/vi/QY1Vetd7OCs/hqdefault.jpg">
+    <div id="input-page">
+      <textarea placeholder="+" on-keypress="inputParse" id="input-area"></textarea>
     </div>
 
-    <div class="right">
-      <div id="title">Let the Battles Begin! - Final Fantasy VII Music Extended</div>
-    </div>
+    <div id="loaded-content" on-click="vplay">
+      <div class="left">
+        <img src="[[imgUrl]]">
+      </div>
 
-    <div id="video"></div>
+      <div class="right">
+        <div id="title">[[videoTitle]]</div>
+      </div>
+
+      <div id="video"></div>
+    </div>
 
   </template>
 
@@ -81,6 +150,10 @@
       /*
         ---variables---
         Player player
+        string videoUrl: youtube video url id
+
+        ---bind variables---
+        string imgUrl: thumbnail image href
 
         ---public functions---
         void vstop()
@@ -95,25 +168,16 @@
       ready()
       {
         super.ready();
-
-        this.player=new YT.Player(this.$["video"],{
-          height:0,width:0,
-          videoId:"QY1Vetd7OCs",
-          playerVars:{
-            loop:1
-          }
-        });
       }
 
       vplay(e)
       {
-        e.preventDefault();
-
         if (this.player.getPlayerState()==1)
         {
           return;
         }
 
+        this.dispatchEvent(new CustomEvent("playing"));
         this.player.setVolume(100);
         this.player.seekTo(0);
         this.player.playVideo();
@@ -147,6 +211,40 @@
           vol=Math.floor(vol);
           this.player.setVolume(vol);
         },50);
+      }
+
+      inputParse(e)
+      {
+        if (e.key=="Enter")
+        {
+          e.preventDefault();
+
+          if (this.$["input-area"].value.slice(0,32)!="https://www.youtube.com/watch?v=")
+          {
+            return;
+          }
+
+          this.videoUrl=this.$["input-area"].value.slice(32);
+          this.loadVideo();
+        }
+      }
+
+      loadVideo()
+      {
+        this.player=new YT.Player(this.$["video"],{
+          height:0,width:0,
+          videoId:this.videoUrl,
+          playerVars:{loop:1},
+          events:{onReady:(e)=>{
+            this.videoTitle=this.player.getVideoData().title;
+          }}
+        });
+
+        this.imgUrl=`https://img.youtube.com/vi/${this.videoUrl}/hqdefault.jpg`;
+
+        this.$["input-page"].parentNode.removeChild(this.$["input-page"]);
+        this.classList.add("selectable");
+        this.dispatchEvent(new CustomEvent("loaded"));
       }
     }
 
