@@ -10,7 +10,7 @@
         font-size: 0;
         margin: 20px;
         border-bottom: 2px solid rgba(0,0,0,0);
-        transition: border-bottom-color .1s;
+        transition: border-bottom-color .1s,background-color .2s;
       }
 
       :host(.selectable)
@@ -42,13 +42,15 @@
       {
         width: 0;
         height: 0;
-        display: none;
+        opacity: 0;
+        transition: opacity .3s;
       }
 
       :host(.selectable) #loaded-content,:host(.selected) #loaded-content
       {
         width: auto;
         height: 160px;
+        opacity: 1;
         display: block;
       }
 
@@ -95,6 +97,7 @@
         height: 160px;
         background-color: rgba(14, 14, 14, 0.45);
         border: 1px dashed rgba(255, 255, 255, 0.30);
+        transition: opacity .3s;
       }
 
       #input-page textarea
@@ -119,6 +122,11 @@
       {
         outline: none;
         background-color: rgb(16, 16, 16);
+      }
+
+      #input-page.fade-out
+      {
+        opacity: 0;
       }
     </style>
 
@@ -195,7 +203,7 @@
       //current max 5sec
       vfade(time)
       {
-        if (this.player && this.player.getPlayerState()!=1)
+        if (!this.player || this.player.getPlayerState()!=1)
         {
           return;
         }
@@ -245,8 +253,12 @@
 
         this.imgUrl=`https://img.youtube.com/vi/${this.videoUrl}/hqdefault.jpg`;
 
-        this.$["input-page"].parentNode.removeChild(this.$["input-page"]);
-        this.classList.add("selectable");
+        this.$["input-page"].classList.add("fade-out");
+        setTimeout(()=>{
+          this.$["input-page"].parentNode.removeChild(this.$["input-page"]);
+          this.classList.add("selectable");
+        },300);
+
         this.dispatchEvent(new CustomEvent("loaded"));
       }
     }
