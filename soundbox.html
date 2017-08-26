@@ -8,6 +8,7 @@
         display: inline-block;
         color: #f1f1f1;
         font-size: 0;
+        margin: 20px;
         border-bottom: 2px solid rgba(0,0,0,0);
         transition: border-bottom-color .1s;
       }
@@ -177,6 +178,7 @@
           return;
         }
 
+        this.classList.add("selected");
         this.dispatchEvent(new CustomEvent("playing"));
         this.player.setVolume(100);
         this.player.seekTo(0);
@@ -186,13 +188,14 @@
       vstop()
       {
         this.vfade(1000);
+        this.classList.remove("selected");
       }
 
       //time to fade out in ms
       //current max 5sec
       vfade(time)
       {
-        if (this.player.getPlayerState()!=1)
+        if (this.player && this.player.getPlayerState()!=1)
         {
           return;
         }
