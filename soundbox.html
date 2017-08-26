@@ -3,6 +3,53 @@
 <dom-module id="sound-box">
   <template>
     <style>
+      :host
+      {
+        display: inline-block;
+        height: 160px;
+        width: auto;
+        color: white;
+        font-size: 0;
+        border-bottom: 2px solid white;
+        background-color: #272727;
+      }
+
+      div
+      {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .left
+      {
+        width: 160px;
+        height: 160px;
+        line-height: 160px;
+        padding: 0 10px 0 10px;
+      }
+
+      .left img
+      {
+        display: inline-block;
+        width: 100%;
+        vertical-align: middle;
+      }
+
+      .right
+      {
+        width: 213px;
+        height: 160px;
+        line-height: 160px;
+        margin: 0 10px 0 5px;
+      }
+
+      #title
+      {
+        vertical-align: middle;
+        line-height: initial;
+        font-size: 20px;
+      }
+
       #video
       {
         height: 0;
@@ -11,9 +58,12 @@
       }
     </style>
 
-    <div class="controls">
-      <a href="" id="play" on-click="vplay">play</a>
-      <a href="" id="stop" on-click="vstop">stop</a>
+    <div class="left">
+      <img src="https://img.youtube.com/vi/QY1Vetd7OCs/hqdefault.jpg">
+    </div>
+
+    <div class="right">
+      <div id="title">Let the Battles Begin! - Final Fantasy VII Music Extended</div>
     </div>
 
     <div id="video"></div>
@@ -28,6 +78,13 @@
         return "sound-box";
       }
 
+      /*
+        ---variables---
+        Player player
+
+        ---public functions---
+        void vstop()
+      */
       static get properties()
       {
         return {
@@ -39,7 +96,13 @@
       {
         super.ready();
 
-        this.player=new YT.Player(this.$["video"],{height:0,width:0,videoId:"QY1Vetd7OCs"});
+        this.player=new YT.Player(this.$["video"],{
+          height:0,width:0,
+          videoId:"QY1Vetd7OCs",
+          playerVars:{
+            loop:1
+          }
+        });
       }
 
       vplay(e)
@@ -56,9 +119,8 @@
         this.player.playVideo();
       }
 
-      vstop(e)
+      vstop()
       {
-        e.preventDefault();
         this.vfade(1000);
       }
 

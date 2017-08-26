@@ -1,6 +1,14 @@
 @charset "UTF-8";
 
+@font-face
+{
+    font-family: "ftr";
+    src: url("ff1.otf") format("opentype");
+}
+
 body
 {
-    margin: 0;
+    margin: 20px;
+    background-color: rgb(27,27,27);
+    font-family: "ftr";
 }
