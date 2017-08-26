@@ -6,9 +6,13 @@ function main()
 {
     soundboxHandler=new _soundboxHandler;
 
-    var stopAll=document.querySelector(".stop-button");
+    document.addEventListener("keypress",(e)=>{
+        if (e.key!="Tab")
+        {
+            return;
+        }
 
-    stopAll.addEventListener("click",(e)=>{
-        soundboxHandler.stopAll();
+        e.preventDefault();
+        soundboxHandler.focusNewSB();
     });
 }
