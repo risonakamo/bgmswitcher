@@ -15,6 +15,8 @@
 
       :host(.selectable)
       {
+        height: 160px;
+        width: 408px;
         user-select: none;
         cursor: pointer;
       }
@@ -26,8 +28,6 @@
 
       :host(.selected)
       {
-        height: 160px;
-        width: auto;
         border-bottom: 2px solid #f1f1f1;
         background-color: #272727;
       }
@@ -140,7 +140,7 @@
       }
     </style>
 
-    <div id="input-page">
+    <div id="input-page" on-click="sbFocus">
       <textarea placeholder="+" on-keypress="inputParse" id="input-area"></textarea>
     </div>
 
