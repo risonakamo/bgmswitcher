@@ -19,9 +19,9 @@ class _soundboxHandler
         this.addNewSoundBox();
     }
 
-    addNewSoundBox()
+    addNewSoundBox(url)
     {
-        this.soundboxes.push(new soundBox);
+        this.soundboxes.push(new soundBox(url));
 
         if (this.playing)
         {
@@ -29,9 +29,9 @@ class _soundboxHandler
         }
 
         //soundbox loaded event: add new empty soundbox
-        this.soundboxes[this.soundboxes.length-1].addEventListener("loaded",(e)=>{
-            this.addNewSoundBox();
-        });
+        // this.soundboxes[this.soundboxes.length-1].addEventListener("loaded",(e)=>{
+        //     this.addNewSoundBox();
+        // });
 
         //soundbox is playing: add unselectable to all other soundboxes
         this.soundboxes[this.soundboxes.length-1].addEventListener("playing",(e)=>{
@@ -47,13 +47,14 @@ class _soundboxHandler
             }
         });
 
-        //clicked on soundbox while playing
-        this.soundboxes[this.soundboxes.length-1].addEventListener("requeststop",(e)=>{
-            this.stopAll();
-        });
+        // //clicked on soundbox while playing
+        // this.soundboxes[this.soundboxes.length-1].addEventListener("requeststop",(e)=>{
+        //     this.stopAll();
+        // });
 
         this.soundBoxPoint.appendChild(this.soundboxes[this.soundboxes.length-1]);
     }
+
 
     stopAll()
     {
