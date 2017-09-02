@@ -67,6 +67,7 @@
         display: inline-block;
         width: 100%;
         vertical-align: middle;
+        -webkit-user-drag: none;
       }
 
       .right
@@ -93,6 +94,7 @@
 
       #input-page
       {
+        position: relative;
         width: 408px;
         height: 160px;
         background-color: rgba(14, 14, 14, 0.45);
@@ -138,10 +140,34 @@
       {
         border-bottom: 0px solid transparent;
       }
+
+      .multi-load
+      {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 70px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 14px;
+        font-family: "ftri";
+        text-align: center;
+        margin: 0 15px 5px 0;
+        color: rgba(241,241,241,.2);
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .multi-load:hover
+      {
+        color: rgba(241,241,241,1);
+        font-family: "ftr";
+      }
     </style>
 
     <div id="input-page" on-click="sbFocus">
       <textarea placeholder="+" on-keypress="inputParse" id="input-area"></textarea>
+      <div class="multi-load" on-click="activateMultiload">multi-load</div>
     </div>
 
     <div id="loaded-content" on-click="vplay">
