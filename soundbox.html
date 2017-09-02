@@ -231,7 +231,7 @@
       {
         super();
 
-        if (this.videoUrl)
+        if (videoUrl)
         {
           this.videoUrl=videoUrl.slice(32);
         }
@@ -307,7 +307,14 @@
 
           if (this.multiLoad)
           {
-            console.log(this.$["input-area"].value.split("\n"));
+            var newsbs=this.$["input-area"].value.split("\n");
+
+            for (var x=0,l=newsbs.length;x<l;x++)
+            {
+              soundboxHandler.addNewSoundBox(newsbs[x]);
+            }
+
+            soundboxHandler.recreateNewSB(this);
             return;
           }
 

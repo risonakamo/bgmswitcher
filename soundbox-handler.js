@@ -7,6 +7,8 @@
     void addNewSoundBox()
     void stopAll()
     void focusNewSB()
+
+    recreateNewSB(element item): delete the given SB and create new one
 */
 
 class _soundboxHandler
@@ -52,9 +54,16 @@ class _soundboxHandler
         //     this.stopAll();
         // });
 
-        this.soundBoxPoint.appendChild(this.soundboxes[this.soundboxes.length-1]);
-    }
+        if (url)
+        {
+            this.soundBoxPoint.insertBefore(this.soundboxes[this.soundboxes.length-1],this.soundboxes[this.soundboxes.length-2]);
+        }
 
+        else
+        {
+            this.soundBoxPoint.appendChild(this.soundboxes[this.soundboxes.length-1]);
+        }
+    }
 
     stopAll()
     {
@@ -69,5 +78,12 @@ class _soundboxHandler
     focusNewSB()
     {
         this.soundboxes[this.soundboxes.length-1].sbFocus();
+    }
+
+    recreateNewSB(item)
+    {
+        this.soundboxes.splice(this.soundboxes.indexOf(item),1);
+        this.soundBoxPoint.removeChild(this.soundBoxPoint.lastChild);
+        this.addNewSoundBox();
     }
 }
